@@ -3,14 +3,11 @@ import styled from 'styled-components';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import logo from '../assets/img_logo.svg';
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Header() {
   useEffect(() => {
     const links = gsap.utils.toArray('.header__nav a') as HTMLElement[];
-    const header = document.querySelector('.header');
 
     const onMouseLeave = (link: HTMLElement) => {
       link.classList.add('animate-out');
@@ -27,6 +24,7 @@ export default function Header() {
         stagger: { each: 0.05, from: direction === 1 ? 'start' : 'end' },
         y: direction === 1 ? 20 : 1,
         opacity: direction === 1 ? 0 : 1,
+        ease: 'power4.out',
       });
     };
 
@@ -37,7 +35,6 @@ export default function Header() {
         targets: 'body',
         className: 'has-scrolled',
       },
-      markers: true,
       onEnter: ({ direction }) => navAnimation(direction),
       onLeaveBack: ({ direction }) => navAnimation(direction),
     });
@@ -53,7 +50,7 @@ export default function Header() {
     <Wrapper className='header'>
       <div className='header__left'>
         <div className='header__left__img'>
-          <img src={logo} alt='logo' />
+          <img src='img_logo.svg' alt='logo' />
         </div>
         <h2 className='header__left__title'>bella</h2>
       </div>
@@ -96,7 +93,7 @@ const Wrapper = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid red;
+  z-index: 2;
 
   .header__left {
     padding-left: var(--h-gutter);
@@ -146,7 +143,6 @@ const Wrapper = styled.header`
   .header__nav li {
     list-style-type: none;
     display: flex;
-    border: 1px solid red;
     overflow: hidden;
   }
 
