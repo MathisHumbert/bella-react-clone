@@ -15,10 +15,10 @@ export default function Hero() {
 
       const leftImages = gsap.utils.toArray(
         '.hero__gallery__left .hero__gallery__image'
-      ) as string[];
+      ) as HTMLElement[];
       const rightImages = gsap.utils.toArray(
         '.hero__gallery__right .hero__gallery__image'
-      ) as string[];
+      ) as HTMLElement[];
 
       const modifier = (index: number) => index * 1.2 + 0.5;
 
@@ -109,6 +109,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   position: relative;
   z-index: 1;
+  perspective: 1000px;
 
   .hero__title {
     font-size: 7vw;
