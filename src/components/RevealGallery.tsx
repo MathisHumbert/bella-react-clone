@@ -24,8 +24,6 @@ export default function RevealGallery() {
         },
       });
 
-      console.log(e.target.getAttribute('data-color'));
-
       tl.to(title, { y: '-27px' })
         .to([paragraph, paragraphMask, imageContainer, imageMask], { y: 0 }, 0)
         .to(image, { scale: 1, duration: 1.1 }, 0)
@@ -58,7 +56,12 @@ export default function RevealGallery() {
       tl.to(title, { y: 0 })
         .to([paragraphMask, imageContainer], { y: '-101%' }, 0)
         .to([paragraph, imageMask], { y: '100%' }, 0)
-        .to(image, { scale: 1.2, duration: 1.1 }, 0);
+        .to(image, { scale: 1.2, duration: 1.1 }, 0)
+        .to(
+          fillBackground,
+          { backgroundColor: 'rgb(172, 183, 174)', ease: 'none' },
+          0
+        );
     };
 
     galleries.forEach((gallery) => {
