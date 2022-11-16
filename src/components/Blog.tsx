@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -35,7 +35,6 @@ export default function Blog({
       animation: parallax,
       trigger: blogRef.current,
       start: 'top bottom',
-      markers: true,
       scrub: 1,
     });
   }, []);
@@ -99,6 +98,7 @@ const Wrapper = styled.section<{
       height: 120%;
       object-fit: cover;
       object-position: 50% 50%;
+      will-change: transform;
     }
   }
 

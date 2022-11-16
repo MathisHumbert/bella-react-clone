@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import RevealGallery from './components/RevealGallery';
 import Portfolio from './components/Portfolio';
 import Blog from './components/Blog';
+import Work from './components/Work';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         heading='Quae Accusamus Consequuntur Sequi Ullam'
         paragraph='17.08.20'
       />
+      <Work />
       <Blog
         side='right'
         color='black'
