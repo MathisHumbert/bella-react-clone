@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <Wrapper>
+    <Wrapper id='main'>
       {children}
       <aside
         className='fill__background'
@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.main`
   .fill__background {
     top: 0;
     left: 0;

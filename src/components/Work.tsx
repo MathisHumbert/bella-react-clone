@@ -2,10 +2,12 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/all';
 
 import WorkItem from './WorkItem';
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollToPlugin);
 
 const workData = [
   {
@@ -43,6 +45,8 @@ export default function Work() {
   const workNavRef = useRef(null);
 
   useEffect(() => {
+    const links = gsap.utils.toArray('.work__nav li') as HTMLElement[];
+
     ScrollTrigger.create({
       trigger: workRef.current,
       start: 'top center',
@@ -66,6 +70,28 @@ export default function Work() {
       endTrigger: '#work4',
       pin: true,
     });
+
+    const onLinkClick = (e: any) => {
+      e.preventDefault();
+      const target = e.target.getAttribute('href');
+      console.log(target);
+
+      gsap.to(window, {
+        duration: 1.5,
+        scrollTo: target,
+        ease: 'power2.out',
+      });
+    };
+
+    links.forEach((link) => {
+      link.addEventListener('click', onLinkClick);
+    });
+
+    return () => {
+      links.forEach((link) => {
+        link.removeEventListener('click', onLinkClick);
+      });
+    };
   }, []);
 
   return (

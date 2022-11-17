@@ -45,7 +45,6 @@ export default function WorkItem({ id, title, text, img, color }: Props) {
     ScrollTrigger.create({
       trigger: workItemRef.current,
       start: 'top center',
-      markers: true,
       end: () => `+=${workItemRef.current!.clientHeight + getVh() / 10}`,
       toggleClass: {
         targets: links[id - 1],

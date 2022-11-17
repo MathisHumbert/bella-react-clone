@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "gsap": "^3.11.3",
+    "imagesloaded": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
+    "@types/imagesloaded": "^4.1.2",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@types/styled-components": "^5.1.26",
