@@ -2,9 +2,13 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import gsap from 'gsap';
 import imagesLoaded from 'imagesloaded';
+import usePage from '../contexts/pageContext';
 
 export default function Loader() {
+  const { isPageFirstLoad, activePageContext } = usePage();
+
   const loaderRef = useRef(null);
+  const loaderMaskRef = useRef(null);
   const loaderContentRef = useRef(null);
   const loaderInnerRef = useRef(null);
   const loaderProgressRef = useRef(null);
@@ -16,97 +20,114 @@ export default function Loader() {
   const loaderSecondLineRef = useRef(null);
 
   useEffect(() => {
-    const updateProgress = (value: number) => {
-      gsap.to(progressTween, {
-        progress: value / imageCount,
-        duration: 0.3,
-        ease: 'power1.out',
+    if (!isPageFirstLoad) {
+      const updateProgress = (value: number) => {
+        gsap.to(progressTween, {
+          progress: value / imageCount,
+          duration: 0.3,
+          ease: 'power1.out',
+        });
+      };
+
+      gsap.set(loaderInnerRef.current, {
+        scaleY: 0.005,
+        transformOrigin: 'bottom',
+        autoAlpha: 1,
       });
-    };
 
-    gsap.set(loaderInnerRef.current, {
-      scaleY: 0.005,
-      transformOrigin: 'bottom',
-      autoAlpha: 1,
-    });
-
-    const progressTween = gsap.to(loaderProgressRef.current, {
-      scaleX: 0,
-      ease: 'none',
-      transformOrigin: 'right',
-      paused: true,
-    });
-
-    let loadedImageCount = 0;
-    let imageCount: number;
-    const container = document.querySelector('#root')!;
-
-    const imgLoaded = imagesLoaded(container);
-    imageCount = imgLoaded.images.length;
-
-    updateProgress(0);
-
-    imgLoaded.on('progress', () => {
-      loadedImageCount++;
-
-      updateProgress(loadedImageCount);
-    });
-
-    imgLoaded.on('done', () => {
-      gsap.set(progressTween, { onComplete: initLoader });
-    });
-
-    const initLoader = () => {
-      const tlLoeaderIn = gsap.timeline({
-        defaults: { duration: 1.1, ease: 'power2.out' },
-        onComplete: () => {
-          tlLoeaderOut.play();
-        },
-      });
-      const tlLoeaderOut = gsap.timeline({
-        defaults: { duration: 1.2, ease: 'power2.inOut' },
+      const progressTween = gsap.to(loaderProgressRef.current, {
+        scaleX: 0,
+        ease: 'none',
+        transformOrigin: 'right',
         paused: true,
       });
 
-      tlLoeaderIn
-        .set(loaderContentRef.current, {
-          autoAlpha: 1,
-        })
-        .to(loaderInnerRef.current, {
-          scaleY: 1,
-          transformOrigin: 'bottom',
-          ease: 'power2.inOut',
-        })
-        .addLabel('revealImage')
-        .from(loaderImageMaskRef.current, { yPercent: 100 }, 'revealImage-=0.6')
-        .from(loaderImageRef.current, { yPercent: 100 }, 'revealImage-=0.6')
-        .from(
-          [loaderFirstLineRef.current, loaderSecondLineRef.current],
-          { yPercent: 100, stagger: 0.1 },
-          'revealImage-=0.4'
-        );
+      let loadedImageCount = 0;
+      let imageCount: number;
+      const container = document.querySelector('#root')!;
 
-      tlLoeaderOut
-        .to(
-          [loaderTitleMaskFirstRef.current, loaderTitleMaskSecondRef.current],
-          {
-            yPercent: -400,
-            stagger: 0.2,
-          }
-        )
-        .to(
-          [loaderRef.current, loaderContentRef.current],
-          { yPercent: -100 },
-          0
-        );
-      // .from('#main', { y: 150 }, 0);
-    };
+      const imgLoaded = imagesLoaded(container);
+      imageCount = imgLoaded.images.length;
+
+      updateProgress(0);
+
+      imgLoaded.on('progress', () => {
+        loadedImageCount++;
+
+        updateProgress(loadedImageCount);
+      });
+
+      imgLoaded.on('done', () => {
+        gsap.set(progressTween, { onComplete: initLoader });
+      });
+
+      const initLoader = () => {
+        const tlLoeaderIn = gsap.timeline({
+          defaults: { duration: 1.1, ease: 'power2.out' },
+          onComplete: () => {
+            tlLoeaderOut.play();
+          },
+        });
+        const tlLoeaderOut = gsap.timeline({
+          defaults: { duration: 1.2, ease: 'power2.inOut' },
+          paused: true,
+        });
+
+        tlLoeaderIn
+          .set(loaderContentRef.current, {
+            autoAlpha: 1,
+          })
+          .to(loaderInnerRef.current, {
+            scaleY: 1,
+            transformOrigin: 'bottom',
+            ease: 'power2.inOut',
+          })
+          .addLabel('revealImage')
+          .from(
+            loaderImageMaskRef.current,
+            { yPercent: 100 },
+            'revealImage-=0.6'
+          )
+          .from(loaderImageRef.current, { yPercent: 100 }, 'revealImage-=0.6')
+          .from(
+            [loaderFirstLineRef.current, loaderSecondLineRef.current],
+            { yPercent: 100, stagger: 0.1 },
+            'revealImage-=0.4'
+          );
+
+        tlLoeaderOut
+          .to(
+            [loaderTitleMaskFirstRef.current, loaderTitleMaskSecondRef.current],
+            {
+              yPercent: -400,
+              stagger: 0.2,
+            }
+          )
+          .to(
+            [loaderRef.current, loaderContentRef.current],
+            { yPercent: -100 },
+            0
+          );
+
+        activePageContext();
+      };
+    } else {
+      const tl = gsap.timeline({
+        defaults: {
+          duration: 0.7,
+          ease: 'power1.inOut',
+        },
+      });
+      tl.set(loaderInnerRef.current, { autoAlpha: 0 })
+        .fromTo(loaderRef.current, { yPercent: 0 }, { yPercent: 100 })
+        .fromTo(loaderMaskRef.current, { yPercent: 0 }, { yPercent: -80 }, 0);
+    }
   }, []);
 
   return (
     <>
-      <LoaderWrapper ref={loaderRef}>
-        <div className='loader__mask'>
+      <LoaderWrapper ref={loaderRef} className='loader'>
+        <div className='loader__mask' ref={loaderMaskRef}>
           <div className='loader__inner' ref={loaderInnerRef}>
             <div className='loader__progress' ref={loaderProgressRef}></div>
           </div>
@@ -172,6 +193,7 @@ const LoaderWrapper = styled.div`
     width: var(--loader-width);
     height: var(--loader-height);
     background: var(--bcg-loaderbluedark);
+    visibility: hidden;
   }
 
   .loader__progress {

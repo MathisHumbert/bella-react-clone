@@ -2,10 +2,14 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Header() {
+  const location = useLocation();
+  let navigate = useNavigate();
+
   useEffect(() => {
     const links = gsap.utils.toArray('.header__nav a') as HTMLElement[];
 
@@ -46,6 +50,37 @@ export default function Header() {
     };
   }, []);
 
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    const target = e.target.getAttribute('href');
+
+    if (target === location.pathname) return;
+
+    const loader = document.querySelector('.loader');
+    const loaderInner = document.querySelector('.loader__inner');
+    const loaderMask = document.querySelector('.loader__mask');
+
+    const tl = gsap.timeline({
+      defaults: {
+        duration: 0.7,
+        ease: 'power1.inOut',
+      },
+    });
+    tl.set(loaderInner, { autoAlpha: 0 })
+      .fromTo(loader, { yPercent: -100 }, { yPercent: 0 })
+      .fromTo(
+        loaderMask,
+        { yPercent: 80 },
+        {
+          yPercent: 0,
+          onComplete: () => {
+            navigate(target);
+          },
+        },
+        0
+      );
+  };
+
   return (
     <Wrapper className='header'>
       <div className='header__left'>
@@ -58,19 +93,29 @@ export default function Header() {
         <nav className='header__nav'>
           <ul>
             <li>
-              <a href='/'>our values</a>
+              <a onClick={handleClick} href='/'>
+                our values
+              </a>
             </li>
             <li>
-              <a href='/'>portfolio</a>
+              <a onClick={handleClick} href='/portfolio'>
+                portfolio
+              </a>
             </li>
             <li>
-              <a href='/'>blog</a>
+              <a onClick={handleClick} href='/'>
+                blog
+              </a>
             </li>
             <li>
-              <a href='/'>how we work</a>
+              <a onClick={handleClick} href='/'>
+                how we work
+              </a>
             </li>
             <li>
-              <a href='/'>contact</a>
+              <a onClick={handleClick} href='/'>
+                contact
+              </a>
             </li>
           </ul>
         </nav>

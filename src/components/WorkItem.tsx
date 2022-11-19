@@ -19,6 +19,7 @@ export default function WorkItem({ id, title, text, img, color }: Props) {
 
   useEffect(() => {
     const links = gsap.utils.toArray('.work__nav li') as HTMLElement[];
+    const workItem = document.querySelectorAll('.work__item')[id - 1];
 
     const getVh = () => {
       const vh = Math.max(
@@ -35,17 +36,17 @@ export default function WorkItem({ id, title, text, img, color }: Props) {
 
     ScrollTrigger.create({
       animation: parallax,
-      trigger: workItemRef.current,
+      trigger: workItem,
       start: 'top bottom',
       scrub: 1,
     });
 
-    const bgcolor = workItemRef.current!.getAttribute('data-color')!;
+    const bgcolor = workItem!.getAttribute('data-color')!;
 
     ScrollTrigger.create({
-      trigger: workItemRef.current,
+      trigger: workItem,
       start: 'top center',
-      end: () => `+=${workItemRef.current!.clientHeight + getVh() / 10}`,
+      end: () => `+=${workItem!.clientHeight + getVh() / 10}`,
       toggleClass: {
         targets: links[id - 1],
         className: 'active',
@@ -64,7 +65,12 @@ export default function WorkItem({ id, title, text, img, color }: Props) {
   }, []);
 
   return (
-    <Wrapper id={`work${id}`} ref={workItemRef} data-color={color}>
+    <Wrapper
+      id={`work${id}`}
+      className='work__item'
+      ref={workItemRef}
+      data-color={color}
+    >
       <div className='work__item__image'>
         <img src={img} alt={title} ref={workItemImageRef} />
       </div>
