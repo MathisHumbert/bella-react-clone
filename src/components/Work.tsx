@@ -74,7 +74,6 @@ export default function Work() {
     const onLinkClick = (e: any) => {
       e.preventDefault();
       const target = e.target.getAttribute('href');
-      console.log(target);
 
       gsap.to(window, {
         duration: 1.5,

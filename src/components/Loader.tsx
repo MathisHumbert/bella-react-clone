@@ -44,8 +44,6 @@ export default function Loader() {
     const imgLoaded = imagesLoaded(container);
     imageCount = imgLoaded.images.length;
 
-    console.log(imageCount);
-
     updateProgress(0);
 
     imgLoaded.on('progress', () => {
