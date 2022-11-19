@@ -100,8 +100,8 @@ export default function Loader() {
           [loaderRef.current, loaderContentRef.current],
           { yPercent: -100 },
           0
-        )
-        .from('#main', { y: 150 }, 0);
+        );
+      // .from('#main', { y: 150 }, 0);
     };
   }, []);
 
