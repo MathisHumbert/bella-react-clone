@@ -1,8 +1,3 @@
-import { useEffect } from 'react';
-import Scrollbar from 'smooth-scrollbar';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-import gsap from 'gsap';
-
 import Header from './components/Header';
 import Hero from './components/Hero';
 import RevealGallery from './components/RevealGallery';
@@ -11,39 +6,7 @@ import Blog from './components/Blog';
 import Work from './components/Work';
 import Loader from './components/Loader';
 
-gsap.registerPlugin(ScrollTrigger);
-
 function App() {
-  let bodyScrollBar: any;
-
-  useEffect(() => {
-    bodyScrollBar = Scrollbar.init(document.querySelector('.main-scrollbar')!, {
-      damping: 0.07,
-      // delegateTo: document,
-    });
-
-    // remove horizontal scrollbar
-    bodyScrollBar.track.xAxis.element.remove();
-
-    // Tell ScrollTrigger to use these proxy getter/setter methods for the "body" element:
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        if (arguments.length) {
-          bodyScrollBar.scrollTop = value; // setter
-        }
-        return bodyScrollBar.scrollTop; // getter
-      },
-    });
-
-    console.log(bodyScrollBar);
-
-    bodyScrollBar.addListener(ScrollTrigger.update);
-
-    return () => {
-      if (Scrollbar) Scrollbar.destroy(document.body);
-    };
-  }, []);
-
   return (
     <>
       <Loader />
